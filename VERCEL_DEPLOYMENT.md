@@ -5,14 +5,15 @@
 Go to your Vercel Project → Settings → Environment Variables and add:
 
 ### 1. Database Configuration
-**DATABASE_URL** (CRITICAL - Use connection pooling for Vercel)
+**DATABASE_URL** (CRITICAL)
 ```
-postgresql://postgres:xectah-hUpkug-juqmy5@db.cccceehzwjnxigquawif.supabase.co:6543/postgres?pgbouncer=true
+postgresql://postgres:xectah-hUpkug-juqmy5@db.cccceehzwjnxigquawif.supabase.co:5432/postgres?sslmode=require
 ```
 ⚠️ **Important**: 
-- Port must be **6543** (not 5432)
-- Must include **?pgbouncer=true** parameter
-- This is the Transaction Pooler connection from Supabase
+- Port must be **5432** (direct connection)
+- Must include **?sslmode=require** parameter
+- This is the direct connection from Supabase (Session mode)
+- The pooler (port 6543) seems to have connectivity issues from Vercel
 
 ### 2. NextAuth Configuration
 **NEXTAUTH_URL**
@@ -56,16 +57,18 @@ admin@gkit-consulting.com
 After deployment, test these URLs:
 
 1. **Health Check**: `https://your-app.vercel.app/api/health`
-   - Should return JSON with database connection status
-   - If it fails, the DATABASE_URL is incorrect
+   - Should return JSON with `"status": "healthy"` and `"database": "connected"`
+   - **If it shows `"database": "disconnected"`**, the DATABASE_URL is incorrect
 
 2. **Home Page**: `https://your-app.vercel.app/`
-   - Should load without errors
-   - May show empty content if database connection fails
+   - Should load with services, testimonials, and hero content
+   - **If page is empty or minimal**, database connection is failing
 
 3. **Services**: `https://your-app.vercel.app/services`
 4. **Blog**: `https://your-app.vercel.app/blog`
 5. **Testimonials**: `https://your-app.vercel.app/testimonials`
+6. **Contact Form**: Fill out and submit - should send email and save to database
+   - **If it fails**, check RESEND_API_KEY is valid
 
 ## Troubleshooting
 
@@ -80,6 +83,18 @@ After deployment, test these URLs:
    - Look for error logs
 
 ### Common Issues
+
+**"Pages show but content is empty/missing"**
+- ✅ Check `/api/health` endpoint - if database is disconnected, that's the issue
+- ✅ Verify DATABASE_URL uses port **6543** with **?pgbouncer=true**
+- ✅ Check Vercel function logs for database errors
+- ✅ Verify your Supabase database has data (run `npm run seed` locally first)
+
+**"Contact form: Failed to send message"**
+- ✅ Verify RESEND_API_KEY in Vercel is valid (should start with `re_`)
+- ✅ Get a new API key from https://resend.com/api-keys if needed
+- ✅ Check EMAIL_FROM domain is verified in Resend dashboard
+- ✅ Look at Vercel function logs for the actual error
 
 **Database Connection Failed**
 - ✅ Verify DATABASE_URL uses port **6543** with **?pgbouncer=true**

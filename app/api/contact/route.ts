@@ -22,11 +22,21 @@ export async function POST(request: Request) {
     });
 
     // Send email notification
-    await sendEmail({
-      to: process.env.EMAIL_TO || 'admin@gkit-consulting.com',
-      subject: `New Contact Form Submission from ${body.name}`,
-      html: getContactEmailTemplate(body),
-    });
+    try {
+      await sendEmail({
+        to: process.env.EMAIL_TO || 'admin@gkit-consulting.com',
+        subject: `New Contact Form Submission from ${body.name}`,
+        html: getContactEmailTemplate(body),
+      });
+    } catch (emailError) {
+      // Log email error but don't fail the request since message is saved
+      console.error('Email send failed:', emailError);
+      return NextResponse.json({ 
+        message: 'Message saved but email notification failed',
+        id: contactMessage.id,
+        emailError: process.env.NODE_ENV === 'development' ? String(emailError) : 'Email service unavailable'
+      }, { status: 200 });
+    }
 
     return NextResponse.json({ 
       message: 'Message sent successfully',
@@ -37,6 +47,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.errors }, { status: 400 });
     }
     console.error('Contact form error:', error);
-    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to send message',
+      details: process.env.NODE_ENV === 'development' ? String(error) : undefined
+    }, { status: 500 });
   }
 }
