@@ -1,14 +1,6 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: Number(process.env.EMAIL_SERVER_PORT),
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail({
   to,
@@ -20,15 +12,15 @@ export async function sendEmail({
   html: string;
 }) {
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to,
+    const data = await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      to: [to],
       subject,
       html,
     });
 
-    console.log('Email sent:', info.messageId);
-    return { success: true, messageId: info.messageId };
+    console.log('Email sent:', data);
+    return { success: true, data };
   } catch (error) {
     console.error('Email error:', error);
     return { success: false, error };
