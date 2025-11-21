@@ -12,24 +12,44 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Error details:', error);
+    // Log to console for debugging
+    console.error('Error occurred:', {
+      message: error.message,
+      stack: error.stack,
+      digest: error.digest,
+      cause: error.cause,
+    });
   }, [error]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full text-center">
+      <div className="max-w-2xl w-full text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Something went wrong!</h1>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <p className="text-sm font-mono text-red-800 break-all">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6 text-left">
+          <p className="text-sm font-semibold text-red-900 mb-2">Error Details:</p>
+          <p className="text-sm font-mono text-red-800 break-all mb-4">
             {error.message || 'Unknown error occurred'}
           </p>
           {error.digest && (
-            <p className="text-xs text-red-600 mt-2">Digest: {error.digest}</p>
+            <p className="text-xs text-red-600 mb-2">Digest: {error.digest}</p>
           )}
-          {process.env.NODE_ENV === 'development' && (
-            <pre className="mt-4 text-left text-xs overflow-auto">
-              {error.stack}
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm font-semibold text-red-900 hover:text-red-700">
+              View Stack Trace
+            </summary>
+            <pre className="mt-2 text-xs overflow-auto bg-red-100 p-3 rounded max-h-64">
+              {error.stack || 'No stack trace available'}
             </pre>
+          </details>
+          {error.cause && (
+            <details className="mt-2">
+              <summary className="cursor-pointer text-sm font-semibold text-red-900 hover:text-red-700">
+                View Cause
+              </summary>
+              <pre className="mt-2 text-xs overflow-auto bg-red-100 p-3 rounded">
+                {JSON.stringify(error.cause, null, 2)}
+              </pre>
+            </details>
           )}
         </div>
         <div className="space-x-4">
