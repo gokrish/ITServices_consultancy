@@ -3,15 +3,16 @@ import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth';
 import Link from 'next/link';
 import { LayoutDashboard, FileText, MessageSquare, Star, Settings, LogOut, Package } from 'lucide-react';
+import type { Session } from 'next-auth';
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions) as Session | null;
 
-  if (!session) {
+  if (!session || !session.user) {
     redirect('/login');
   }
 
@@ -22,7 +23,7 @@ export default async function AdminLayout({
         <aside className="w-64 bg-white shadow-lg min-h-screen">
           <div className="p-6 border-b">
             <h1 className="text-xl font-bold text-blue-600">GK IT Admin</h1>
-            <p className="text-sm text-gray-600 mt-1">{session.user?.email}</p>
+            <p className="text-sm text-gray-600 mt-1">{session.user.email}</p>
           </div>
           <nav className="p-4 space-y-1">
             <Link
