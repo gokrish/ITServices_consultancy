@@ -9,7 +9,7 @@ import { CheckCircle, ArrowRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ServicePage({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const service = await prisma.service.findUnique({
     where: { slug: params.slug },
   });
