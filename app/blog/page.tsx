@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
 import { Calendar, Eye } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Blog',
   description: 'Insights, guides, and best practices from GK IT Consulting experts.',

@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card';
 import { CheckCircle, Target, Users, Lightbulb } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'About Us',
   description: 'Learn about GK IT Consulting - our mission, values, and expertise in delivering cutting-edge technology solutions.',

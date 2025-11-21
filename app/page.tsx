@@ -6,6 +6,8 @@ import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 async function getHomeData() {
   const [services, testimonials, siteContent] = await Promise.all([
     prisma.service.findMany({

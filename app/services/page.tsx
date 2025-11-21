@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { prisma } from '@/lib/prisma';
 import { Cloud, Database, Code, Workflow, Shield, Headphones, Bot, ArrowRight } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 const iconMap: Record<string, any> = {
   Cloud,
   Database,

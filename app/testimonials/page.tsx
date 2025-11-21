@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { prisma } from '@/lib/prisma';
 import { Star } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Client Testimonials',
   description: 'Read what our clients say about working with GK IT Consulting.',
