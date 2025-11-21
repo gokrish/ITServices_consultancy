@@ -7,18 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/lib/prisma';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
-export async function generateStaticParams() {
-  const services = await prisma.service.findMany({
-    where: { published: true },
-    select: { slug: true },
-  });
+export const dynamic = 'force-dynamic';
 
-  return services.map((service) => ({
-    slug: service.slug,
-  }));
-}
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export default async function ServicePage({ params }: { params: { slug: string } }) {
   const service = await prisma.service.findUnique({
     where: { slug: params.slug },
   });
