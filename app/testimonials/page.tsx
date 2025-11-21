@@ -12,10 +12,15 @@ export const metadata = {
 };
 
 export default async function TestimonialsPage() {
-  const testimonials = await prisma.testimonial.findMany({
-    where: { published: true },
-    orderBy: { order: 'asc' },
-  });
+  let testimonials = [];
+  try {
+    testimonials = await prisma.testimonial.findMany({
+      where: { published: true },
+      orderBy: { order: 'asc' },
+    });
+  } catch (error) {
+    console.error('Failed to fetch testimonials:', error);
+  }
 
   return (
     <>

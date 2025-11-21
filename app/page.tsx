@@ -9,31 +9,44 @@ import { prisma } from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
-  const [services, testimonials, siteContent] = await Promise.all([
-    prisma.service.findMany({
-      where: { published: true, featured: true },
-      orderBy: { order: 'asc' },
-      take: 6,
-    }),
-    prisma.testimonial.findMany({
-      where: { published: true, featured: true },
-      orderBy: { order: 'asc' },
-      take: 3,
-    }),
-    prisma.siteContent.findMany({
-      where: {
-        key: {
-          in: ['home_hero_title', 'home_hero_subtitle'],
+  try {
+    const [services, testimonials, siteContent] = await Promise.all([
+      prisma.service.findMany({
+        where: { published: true, featured: true },
+        orderBy: { order: 'asc' },
+        take: 6,
+      }),
+      prisma.testimonial.findMany({
+        where: { published: true, featured: true },
+        orderBy: { order: 'asc' },
+        take: 3,
+      }),
+      prisma.siteContent.findMany({
+        where: {
+          key: {
+            in: ['home_hero_title', 'home_hero_subtitle'],
+          },
         },
+      }),
+    ]);
+
+    const contentMap = Object.fromEntries(
+      siteContent.map(item => [item.key, item.content])
+    );
+
+    return { services, testimonials, contentMap };
+  } catch (error) {
+    console.error('Database error in getHomeData:', error);
+    // Return empty data instead of crashing
+    return {
+      services: [],
+      testimonials: [],
+      contentMap: {
+        home_hero_title: 'Transform Your Business with Expert IT Solutions',
+        home_hero_subtitle: 'We deliver cutting-edge technology solutions tailored to your business needs.',
       },
-    }),
-  ]);
-
-  const contentMap = Object.fromEntries(
-    siteContent.map(item => [item.key, item.content])
-  );
-
-  return { services, testimonials, contentMap };
+    };
+  }
 }
 
 const iconMap: Record<string, any> = {

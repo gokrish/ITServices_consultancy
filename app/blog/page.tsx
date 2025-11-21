@@ -14,10 +14,15 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  const blogs = await prisma.blog.findMany({
-    where: { published: true },
-    orderBy: { publishedAt: 'desc' },
-  });
+  let blogs = [];
+  try {
+    blogs = await prisma.blog.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  } catch (error) {
+    console.error('Failed to fetch blogs:', error);
+  }
 
   return (
     <>

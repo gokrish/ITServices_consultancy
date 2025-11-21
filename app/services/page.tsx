@@ -24,10 +24,15 @@ export const metadata = {
 };
 
 export default async function ServicesPage() {
-  const services = await prisma.service.findMany({
-    where: { published: true },
-    orderBy: { order: 'asc' },
-  });
+  let services = [];
+  try {
+    services = await prisma.service.findMany({
+      where: { published: true },
+      orderBy: { order: 'asc' },
+    });
+  } catch (error) {
+    console.error('Failed to fetch services:', error);
+  }
 
   return (
     <>

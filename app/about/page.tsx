@@ -12,9 +12,14 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
-  const aboutContent = await prisma.siteContent.findUnique({
-    where: { key: 'about_content' },
-  });
+  let aboutContent = null;
+  try {
+    aboutContent = await prisma.siteContent.findUnique({
+      where: { key: 'about_content' },
+    });
+  } catch (error) {
+    console.error('Failed to fetch about content:', error);
+  }
 
   const content = aboutContent?.content || '';
   const metadata = aboutContent?.metadata as any;
