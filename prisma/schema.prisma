@@ -75,6 +75,8 @@ model Service {
   order        Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  
+  @@index([slug, published, featured])
 }
 
 model Testimonial {
@@ -90,6 +92,8 @@ model Testimonial {
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  @@index([published, featured])
 }
 
 model Blog {
@@ -108,6 +112,9 @@ model Blog {
   publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  @@index([slug, published, featured])
+  @@index([category, published])
 }
 
 model ContactMessage {
@@ -120,6 +127,8 @@ model ContactMessage {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  @@index([read, createdAt])
 }
 
 model SiteContent {
@@ -131,3 +140,51 @@ model SiteContent {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @db.Text
+  category  String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([category, published])
+  @@index([published, order])
+}
+
+model Newsletter {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  status       String   @default("active")
+  subscribedAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@index([email, status])
+}
+
+model CaseStudy {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  client        String
+  industry      String
+  challenge     String   @db.Text
+  solution      String   @db.Text
+  results       String   @db.Text
+  image         String?
+  metrics       Json?
+  technologies  String[] @default([])
+  testimonialId String?
+  featured      Boolean  @default(false)
+  published     Boolean  @default(true)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([slug, published])
+  @@index([published, featured])
+}
+

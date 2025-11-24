@@ -3,6 +3,7 @@ import { Footer } from '@/components/footer';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { prisma } from '@/lib/prisma';
 import { Star } from 'lucide-react';
+import { Testimonial } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export const metadata = {
 };
 
 export default async function TestimonialsPage() {
-  let testimonials = [];
+  let testimonials: Testimonial[] = [];
   try {
     testimonials = await prisma.testimonial.findMany({
       where: { published: true },

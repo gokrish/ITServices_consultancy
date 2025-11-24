@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
 import { Calendar, Eye } from 'lucide-react';
+import { Blog } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,7 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  let blogs = [];
+  let blogs: Blog[] = [];
   try {
     blogs = await prisma.blog.findMany({
       where: { published: true },
