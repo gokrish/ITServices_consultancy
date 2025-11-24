@@ -68,10 +68,6 @@ const nextConfig = {
   },
   // Enable compression
   compress: true,
-  // Power Vercel Analytics
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 export default nextConfig;
