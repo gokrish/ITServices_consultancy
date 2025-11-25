@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FadeInSection } from '@/components/fade-in-section';
 import { Mail, Phone, MapPin, Clock, CheckCircle2, Send } from 'lucide-react';
+import { CONTACT_INFO } from '@/lib/constants/services';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -239,21 +240,21 @@ export default function ContactPage() {
                   {
                     icon: Mail,
                     title: 'Email',
-                    content: 'contact@gkit-consulting.com',
-                    href: 'mailto:contact@gkit-consulting.com',
+                    content: CONTACT_INFO.email.display,
+                    href: CONTACT_INFO.email.href,
                     delay: 0,
                   },
                   {
                     icon: Phone,
                     title: 'Phone',
-                    content: '+1 (234) 567-890',
-                    href: 'tel:+1234567890',
+                    content: CONTACT_INFO.phone.display,
+                    href: CONTACT_INFO.phone.href,
                     delay: 0.1,
                   },
                   {
                     icon: MapPin,
                     title: 'Location',
-                    content: 'San Francisco, CA\nUnited States',
+                    content: CONTACT_INFO.address.display,
                     delay: 0.2,
                   },
                   {

@@ -8,17 +8,13 @@ import { AnimatedHero } from '@/components/animated-hero';
 import { AnimatedServiceCard } from '@/components/animated-service-card';
 import { FadeInSection } from '@/components/fade-in-section';
 import { prisma } from '@/lib/prisma';
+import { SERVICES } from '@/lib/constants/services';
 
 export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
   try {
-    const [services, testimonials, siteContent] = await Promise.all([
-      prisma.service.findMany({
-        where: { published: true, featured: true },
-        orderBy: { order: 'asc' },
-        take: 6,
-      }),
+    const [testimonials, siteContent] = await Promise.all([
       prisma.testimonial.findMany({
         where: { published: true, featured: true },
         orderBy: { order: 'asc' },
@@ -37,12 +33,15 @@ async function getHomeData() {
       siteContent.map(item => [item.key, item.content])
     );
 
+    // Use hardcoded services for consistency
+    const services = SERVICES;
+
     return { services, testimonials, contentMap };
   } catch (error) {
     console.error('Database error in getHomeData:', error);
-    // Return empty data instead of crashing
+    // Return hardcoded services even on error
     return {
-      services: [],
+      services: SERVICES,
       testimonials: [],
       contentMap: {
         home_hero_title: 'Transform Your Business with Expert IT Solutions',
@@ -75,14 +74,14 @@ export default async function Home() {
               </p>
             </FadeInSection>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service: any, index: number) => {
+              {services.map((service, index: number) => {
                 return (
                   <AnimatedServiceCard
-                    key={service.id}
+                    key={service.slug}
                     title={service.title}
                     description={service.description}
                     slug={service.slug}
-                    iconName={service.icon || 'Code'}
+                    iconName={service.icon}
                     index={index}
                   />
                 );

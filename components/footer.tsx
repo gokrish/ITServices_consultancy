@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github } from 'lucide-react';
 import { NewsletterForm } from './newsletter-form';
+import { CONTACT_INFO } from '@/lib/constants/services';
 
 export function Footer() {
   return (
@@ -26,19 +27,19 @@ export function Footer() {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-slate-300 text-sm">
                 <Mail className="h-4 w-4" />
-                <a href="mailto:contact@gkit-consulting.com" className="hover:text-blue-400 transition-colors">
-                  contact@gkit-consulting.com
+                <a href={CONTACT_INFO.email.href} className="hover:text-blue-400 transition-colors">
+                  {CONTACT_INFO.email.display}
                 </a>
               </div>
               <div className="flex items-center gap-2 text-slate-300 text-sm">
                 <Phone className="h-4 w-4" />
-                <a href="tel:+1234567890" className="hover:text-blue-400 transition-colors">
-                  +1 (234) 567-890
+                <a href={CONTACT_INFO.phone.href} className="hover:text-blue-400 transition-colors">
+                  {CONTACT_INFO.phone.display}
                 </a>
               </div>
               <div className="flex items-center gap-2 text-slate-300 text-sm">
                 <MapPin className="h-4 w-4" />
-                <span>San Francisco, CA</span>
+                <span>{CONTACT_INFO.address.display}</span>
               </div>
             </div>
           </div>

@@ -46,7 +46,7 @@ export function AnimatedServiceCard({
         <Card className="h-full relative overflow-hidden group border-2 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300">
           {/* Gradient Overlay on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-purple-500/5 group-hover:to-blue-500/5 transition-all duration-300" />
-          
+
           <CardHeader className="relative">
             <motion.div
               whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
@@ -64,11 +64,11 @@ export function AnimatedServiceCard({
           </CardHeader>
           <CardContent className="relative">
             <Link href={`/services/${slug}`}>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 className="p-0 group/button h-auto font-semibold text-blue-600 hover:text-blue-700"
               >
-                Learn more 
+                Learn more
                 <motion.span
                   className="inline-block ml-1"
                   initial={{ x: 0 }}
